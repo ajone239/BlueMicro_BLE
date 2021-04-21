@@ -1,0 +1,161 @@
+Battery	nrf52battery.cpp	/^Battery::Battery() { \/\/ Constructor$/
+BatteryType	nrf52battery.h	/^  enum BatteryType {$/
+BlueMicro_Display	BlueMicro_display.cpp	/^BlueMicro_Display::BlueMicro_Display(PersistentSta/
+COMB	combo_engine.h	/^#define COMB(name, key, ...) combos.addComboToList/
+ComboEngine	combo_engine.cpp	/^ComboEngine::ComboEngine() {$/
+DisplayUpdateType	BlueMicro_display.h	/^enum DisplayUpdateType {$/
+DynamicState	datastructures.h	/^} DynamicState; \/\/ meant for keyboard and BLE st/
+IsSubset	combo_engine.h	/^template <typename T> bool IsSubset(std::vector<T>/
+IsSubsetPreSorted	combo_engine.h	/^template <typename T> bool IsSubsetPreSorted(std::/
+KB	advanced_keycodes.h	/^#define KB(KC) (((uint16_t)KC << 8) | KC_RESERVED_/
+KEYMAP	keyboard_config.h	/^#define KEYMAP(k00, k01, k02, k03, k04, k05, k06, /
+KEYS	combo_engine.h	/^#define KEYS(name, keycodestosend, ...) combos.add/
+KI	advanced_keycodes.h	/^#define KI(KC)                                    /
+KS	advanced_keycodes.h	/^#define KS(KC) (((uint16_t)KC << 8) | KC_RESERVED_/
+Key	Key.cpp	/^Key::Key(uint32_t activation) {$/
+KeyScanner	KeyScanner.cpp	/^KeyScanner::KeyScanner(PersistentState *cfg, Dynam/
+KeyState	KeyState.cpp	/^KeyState::KeyState() {$/
+LALT	advanced_keycodes.h	/^#define LALT(KEY) MOD(MOD_LALT, KEY)$/
+LCTL	advanced_keycodes.h	/^#define LCTL(KEY) MOD(MOD_LCTRL, KEY)$/
+LGUI	advanced_keycodes.h	/^#define LGUI(KEY) MOD(MOD_LGUI, KEY)$/
+LSFT	advanced_keycodes.h	/^#define LSFT(KEY) MOD(MOD_LSHIFT, KEY)$/
+MAC	advanced_keycodes.h	/^#define MAC(KC) ((static_cast<int>(Duration::ONE_S/
+MC	advanced_keycodes.h	/^#define MC(KC) (((uint16_t)KC << 8) | KC_RESERVED_/
+MK	advanced_keycodes.h	/^#define MK(KC) (((uint16_t)KC << 8) | KC_RESERVED_/
+MOD	advanced_keycodes.h	/^#define MOD(M, KC) ((uint16_t)KC | (uint16_t)M)$/
+MR	advanced_keycodes.h	/^#define MR(KC) (((uint16_t)KC << 8) | KC_RESERVED_/
+MS	advanced_keycodes.h	/^#define MS(KC) (((uint16_t)KC << 8) | KC_RESERVED_/
+OS	advanced_keycodes.h	/^#define OS(KC) ((static_cast<int>(Duration::ONE_SH/
+PWMSetMaxVal	LedPwm.cpp	/^void PWMSetMaxVal() { pwmmaxvalue = DEFAULT_PWM_MA/
+Payload	bluetooth.h	/^} Payload;$/
+PersistentState	datastructures.h	/^} PersistentState; \/\/ meant for configuration an/
+RALT	advanced_keycodes.h	/^#define RALT(KEY) MOD(MOD_RALT, KEY)$/
+RCTL	advanced_keycodes.h	/^#define RCTL(KEY) MOD(MOD_RCTRL, KEY)$/
+REG32	debug_cli.h	/^typedef volatile uint32_t REG32;$/
+RGUI	advanced_keycodes.h	/^#define RGUI(KEY) MOD(MOD_RGUI, KEY)$/
+RSFT	advanced_keycodes.h	/^#define RSFT(KEY) MOD(MOD_RSHIFT, KEY)$/
+S	advanced_keycodes.h	/^#define S(KC) MOD(MOD_LSHIFT, KC)$/
+SEND_KC	advanced_keycodes.h	/^#define SEND_KC(KC) (static_cast<uint8_t>(KC & 0x0/
+SUBS	combo_engine.h	/^#define SUBS(name, stringtosend, ...) combos.addSu/
+StatePayload	bluetooth.h	/^} StatePayload;$/
+TG	advanced_keycodes.h	/^#define TG(KC) ((static_cast<int>(Duration::TOGGLE/
+UpdateQueue	firmware_main.cpp	/^void UpdateQueue() {$/
+addActivation	Key.cpp	/^void Key::addActivation(const uint8_t layer, const/
+addComboToList	combo_engine.cpp	/^void ComboEngine::addComboToList(trigger_keycodes_/
+addKeycodeStringToBuffer	combo_engine.cpp	/^void ComboEngine::addKeycodeStringToBuffer(trigger/
+addKeycodeStringToList	combo_engine.cpp	/^void ComboEngine::addKeycodeStringToList(trigger_k/
+addKeycodeToQueue	firmware_main.cpp	/^void addKeycodeToQueue(const uint16_t keycode) {$/
+addMethod	KeyState.cpp	/^void KeyState::addMethod(Method method) {$/
+addStringToQueue	firmware_main.cpp	/^void addStringToQueue(const char *str) {$/
+advertizing_slow_callback	bluetooth.cpp	/^void advertizing_slow_callback(void) {$/
+advertizing_stop_callback	bluetooth.cpp	/^void advertizing_stop_callback(void) {$/
+analogReadVDD	nrf52battery.cpp	/^uint32_t Battery::analogReadVDD() {$/
+anyCombosConfigured	combo_engine.cpp	/^bool ComboEngine::anyCombosConfigured() { return c/
+anyMacrosActive	combo_engine.cpp	/^bool ComboEngine::anyMacrosActive(trigger_keycodes/
+anyMacrosConfigured	combo_engine.cpp	/^bool ComboEngine::anyMacrosConfigured() { return m/
+anySubstConfigured	combo_engine.cpp	/^bool ComboEngine::anySubstConfigured() { return su/
+backgroundTaskID	datastructures.h	/^enum backgroundTaskID {$/
+batt_type	nrf52battery.h	/^typedef void (*mvToPercent_cb_t)(uint8_t & vbat_pe/
+battery	BlueMicro_display.cpp	/^void battery(uint8_t x, uint8_t y, uint8_t data) {/
+begin	BlueMicro_display.cpp	/^void BlueMicro_Display::begin(void) {$/
+bt_setup	bluetooth.cpp	/^void bt_setup(uint8_t BLEProfile) {$/
+bt_stopAdv	bluetooth.cpp	/^void bt_stopAdv() { Bluefruit.Advertising.stop(); /
+cccd_callback	bluetooth.cpp	/^void cccd_callback(uint16_t conn_hdl, BLECharacter/
+cent_connect_callback	bluetooth.cpp	/^void cent_connect_callback(uint16_t conn_handle) {/
+changeUpdateMode	BlueMicro_display.cpp	/^void BlueMicro_Display::changeUpdateMode(DisplayUp/
+cie_lightness	LedPwm.cpp	/^uint16_t cie_lightness(uint16_t v) {$/
+clear	BlueMicro_display.cpp	/^void BlueMicro_Display::clear() {$/
+clearAllQueuedTones	BlueMicro_tone.cpp	/^void BlueMicro_tone::clearAllQueuedTones() {$/
+clearLists	combo_engine.cpp	/^void ComboEngine::clearLists() {$/
+combo_t	combo_engine.h	/^typedef std::pair<trigger_keycodes_t, uint16_t> co/
+combolist_t	combo_engine.h	/^typedef std::vector<combo_t> combolist_t;$/
+connectionMode	datastructures.h	/^enum connectionMode { CONNECTION_MODE_AUTO, CONNEC/
+connectionState	datastructures.h	/^enum connectionState { CONNECTION_NONE, CONNECTION/
+convertCStrToKeycodeVector	combo_engine.cpp	/^trigger_keycodes_t ComboEngine::convertCStrToKeyco/
+copyRemoteReport	KeyScanner.cpp	/^void KeyScanner::copyRemoteReport() {$/
+countActiveCombosKeys	combo_engine.cpp	/^uint8_t ComboEngine::countActiveCombosKeys(trigger/
+decPWMMaxVal	LedPwm.cpp	/^void decPWMMaxVal() {$/
+decPWMStepSize	LedPwm.cpp	/^void decPWMStepSize() {$/
+disable	nrf52gpio.cpp	/^void led_handler::disable() {$/
+drawDebug	BlueMicro_display.cpp	/^void drawDebug(PersistentState *cfg, DynamicState /
+drawStartup	BlueMicro_display.cpp	/^void drawStartup(PersistentState *cfg, DynamicStat/
+drawStatus	BlueMicro_display.cpp	/^void drawStatus(PersistentState *cfg, DynamicState/
+enable	nrf52gpio.cpp	/^void led_handler::enable() {$/
+findActiveCombos	combo_engine.cpp	/^uint8_t ComboEngine::findActiveCombos(trigger_keyc/
+findLargestCombo	combo_engine.cpp	/^combo_t ComboEngine::findLargestCombo() {$/
+findLargestSubst	combo_engine.cpp	/^subst_t ComboEngine::findLargestSubst() {$/
+getActiveActivation	Key.cpp	/^std::pair<uint16_t, Duration> Key::getActiveActiva/
+getState	KeyState.cpp	/^KeyState::State KeyState::getState() const { retur/
+getlayer	KeyScanner.cpp	/^uint8_t KeyScanner::getlayer(uint16_t layers) {$/
+gpiotester	debug_cli.cpp	/^void gpiotester() {$/
+handleSerial	debug_cli.cpp	/^void handleSerial() {$/
+hello	nrf52gpio.cpp	/^void led_handler::hello() {$/
+hid_GetMediaUsageCode	HID.cpp	/^uint16_t hid_GetMediaUsageCode(uint16_t keycode) {/
+hid_keyboard_keypad_usage	hid_keycodes.h	/^enum hid_keyboard_keypad_usage {$/
+hsvToRgb	LedRGB.cpp	/^rgb_color hsvToRgb(uint16_t h, uint8_t s, uint8_t /
+incPWMMaxVal	LedPwm.cpp	/^void incPWMMaxVal() {$/
+incPWMStepSize	LedPwm.cpp	/^void incPWMStepSize() {$/
+layer_request_callback	bluetooth.cpp	/^void layer_request_callback(uint16_t conn_hdl, BLE/
+led_handler	nrf52gpio.cpp	/^led_handler::led_handler(PersistentState *cfg, Dyn/
+loadConfig	firmware_main.cpp	/^void loadConfig() {$/
+modeCol	firmware_main.cpp	/^#define modeCol(c) pinMode(c, INPUT_PULLUP)$/
+mvToPercent_default	nrf52battery.cpp	/^void mvToPercent_default(uint8_t &vbat_per, uint32/
+mvToPercent_test	nrf52battery.cpp	/^void mvToPercent_test(uint8_t &vbat_per, uint32_t /
+notify_callback	bluetooth.cpp	/^void notify_callback(BLEClientCharacteristic *chr,/
+playAllQueuedTonesNow	BlueMicro_tone.cpp	/^void BlueMicro_tone::playAllQueuedTonesNow() {$/
+playNoteNow	BlueMicro_tone.cpp	/^void BlueMicro_tone::playNoteNow(int frequency, in/
+playTone	BlueMicro_tone.cpp	/^void BlueMicro_tone::playTone(toneList_t toneToPla/
+playToneNow	BlueMicro_tone.cpp	/^void BlueMicro_tone::playToneNow(unsigned int freq/
+prepareSleep	sleep.cpp	/^void prepareSleep() {$/
+press	Key.cpp	/^void Key::press(const unsigned long currentMillis)/
+printline	BlueMicro_display.cpp	/^void printline(uint8_t x, uint8_t y, char *data) {/
+processActiveKeycodewithComboKeys	combo_engine.cpp	/^trigger_keycodes_t ComboEngine::processActiveKeyco/
+processActiveKeycodewithCombos	combo_engine.cpp	/^trigger_keycodes_t ComboEngine::processActiveKeyco/
+processActiveMacros	combo_engine.cpp	/^trigger_keycodes_t ComboEngine::processActiveMacro/
+processTones	BlueMicro_tone.cpp	/^void BlueMicro_tone::processTones() {$/
+process_keyboard_function	firmware_main.cpp	/^void process_keyboard_function(uint16_t keycode) {/
+process_user_macros	firmware_main.cpp	/^void process_user_macros(uint16_t macroid) {$/
+prph_connect_callback	bluetooth.cpp	/^void prph_connect_callback(uint16_t conn_handle) {/
+prph_disconnect_callback	bluetooth.cpp	/^void prph_disconnect_callback(uint16_t conn_handle/
+readVBAT	nrf52battery.cpp	/^uint32_t Battery::readVBAT(void) {$/
+readVDDH	nrf52battery.cpp	/^uint32_t Battery::readVDDH(void) {$/
+release	KeyScanner.cpp	/^void KeyScanner::release(unsigned long currentMill/
+resetConfig	firmware_main.cpp	/^void resetConfig() {$/
+resetReport	KeyScanner.cpp	/^void KeyScanner::resetReport() {$/
+rssi_changed_callback	bluetooth.cpp	/^void rssi_changed_callback(uint16_t conn_hdl, int8/
+saveConfig	firmware_main.cpp	/^void saveConfig() {$/
+scanMatrix	firmware_main.cpp	/^void scanMatrix() {$/
+scan_callback	bluetooth.cpp	/^void scan_callback(ble_gap_evt_adv_report_t *repor/
+setCallback	nrf52gpio.cpp	/^void led_handler::setCallback(ledupdateCallback cb/
+setDebugDisplayCallback	BlueMicro_display.cpp	/^void BlueMicro_Display::setDebugDisplayCallback(up/
+setPWMMode	LedPwm.cpp	/^void setPWMMode(int mode) { PWMMode = mode; }$/
+setSpeakerPin	BlueMicro_tone.cpp	/^void BlueMicro_tone::setSpeakerPin(uint8_t pin) { /
+setStartupDisplayCallback	BlueMicro_display.cpp	/^void BlueMicro_Display::setStartupDisplayCallback(/
+setStatusDisplayCallback	BlueMicro_display.cpp	/^void BlueMicro_Display::setStatusDisplayCallback(u/
+setmvToPercentCallback	nrf52battery.cpp	/^void Battery::setmvToPercentCallback(mvToPercent_c/
+setup	firmware_main.cpp	/^void setup() {$/
+setupConfig	firmware_main.cpp	/^void setupConfig() {$/
+setupKeymap	keymap.cpp	/^void setupKeymap() {$/
+setupMatrix	firmware_main.cpp	/^void setupMatrix(void) {$/
+setupRGB	LedRGB.cpp	/^void setupRGB(void) {$/
+sleep	BlueMicro_display.cpp	/^void BlueMicro_Display::sleep(void) {$/
+stat	datastructures.h	/^typedef void (*updateDisplay_cb_t)(PersistentState/
+status	datastructures.h	/^typedef void (*ledupdateCallback)(PersistentState /
+stepPWMMode	LedPwm.cpp	/^void stepPWMMode() {$/
+subst_t	combo_engine.h	/^typedef std::pair<trigger_keycodes_t, trigger_keyc/
+substlist_t	combo_engine.h	/^typedef std::vector<subst_t> substlist_t;$/
+suspendRGB	LedRGB.cpp	/^void suspendRGB(void) {$/
+systems	hid_keycodes.h	/^\/\/ These HID usages operate only on mobile syste/
+toneList_t	BlueMicro_tone.h	/^typedef enum { TONE_STARTUP, TONE_BLE_PROFILE, TON/
+trigger_keycodes_t	combo_engine.h	/^typedef std::vector<uint16_t> trigger_keycodes_t;$/
+update	BlueMicro_display.cpp	/^void BlueMicro_Display::update(void) {$/
+updateBLEStatus	bluetooth.cpp	/^void updateBLEStatus(void) {$/
+updateBattery	nrf52battery.cpp	/^void Battery::updateBattery(void)$/
+updateBuffer	KeyScanner.cpp	/^void KeyScanner::updateBuffer() {$/
+updatePWM	LedPwm.cpp	/^void updatePWM(unsigned long timesincelastkeypress/
+updateRGB	LedRGB.cpp	/^void updateRGB(unsigned long timesincelastkeypress/
+updateRGBmode	LedRGB.cpp	/^void updateRGBmode(uint32_t mode) { rgb_mode = mod/
+updateRemoteLayer	KeyScanner.cpp	/^void KeyScanner::updateRemoteLayer(uint8_t data) {/
+updateRemoteReport	KeyScanner.cpp	/^void KeyScanner::updateRemoteReport(uint8_t data0,/
+void	bluetooth.cpp	/^\/\/ typedef void (*stop_callback_t) (void);$/
+writeRow	firmware_main.cpp	/^#define writeRow(r) digitalWrite(r, LOW)$/
