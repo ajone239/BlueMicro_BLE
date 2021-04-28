@@ -595,7 +595,7 @@ void process_keyboard_function(uint16_t keycode) {
     case RGB_MODE_SWIRL:
       if ( keyboardstate.helpmode) {addStringToQueue("RGB_MODE_SWIRL");}
       updateRGBmode(RGB_MODE_SWIRL);
-      break;   
+      break;
     case RGB_MODE_SNAKE:
       if ( keyboardstate.helpmode) {addStringToQueue("RGB_MODE_SNAKE");}
       updateRGBmode(RGB_MODE_SNAKE);
@@ -607,7 +607,7 @@ void process_keyboard_function(uint16_t keycode) {
     case RGB_MODE_XMAS:
       if ( keyboardstate.helpmode) {addStringToQueue("RGB_MODE_XMAS");}
       updateRGBmode(RGB_MODE_XMAS);
-      break;   
+      break;
     case RGB_MODE_GRADIENT:
       if ( keyboardstate.helpmode) {addStringToQueue("RGB_MODE_GRADIENT");}
       updateRGBmode(RGB_MODE_GRADIENT);
@@ -618,10 +618,10 @@ void process_keyboard_function(uint16_t keycode) {
       break;
     case RGB_SPI:
       if ( keyboardstate.helpmode) {addStringToQueue("RGB_SPI");}
-      break;   
+      break;
     case RGB_SPD:
       if ( keyboardstate.helpmode) {addStringToQueue("RGB_SPD");}
-      break;    
+      break;
     case PRINT_BATTERY:
       intval = batterymonitor.vbat_per;
       switch (batterymonitor.batt_type)
@@ -637,7 +637,7 @@ void process_keyboard_function(uint16_t keycode) {
             else
             {
               snprintf (buffer, sizeof(buffer), "VDD = %.0f mV (%3d %%)", batterymonitor.vbat_mv*1.0, intval);
-            }    
+            }
         break;
         case BATT_LIPO:
             if (intval>99)
@@ -647,7 +647,7 @@ void process_keyboard_function(uint16_t keycode) {
             else
             {
               sprintf (buffer, "LIPO = %.0f mV (%3d %%)", batterymonitor.vbat_mv*1.0, intval);
-            }   
+            }
         break;
         case BATT_VDDH:
             if (intval>99)
@@ -657,9 +657,9 @@ void process_keyboard_function(uint16_t keycode) {
             else
             {
               sprintf (buffer, "LIPO = %.0f mV (%3d %%)", batterymonitor.vbat_mv*1.0, intval);
-            }   
+            }
         break;
-      } 
+      }
     addStringToQueue(buffer);
     addKeycodeToQueue(KC_ENTER);
     break;
@@ -1003,135 +1003,137 @@ void process_user_special_keys() {
 /**************************************************************************************************************************/
 void sendKeyPresses() {
 
-  KeyScanner::getReport(); // get state data - Data is in KeyScanner::currentReport
+  std::array<uint8_t, 8> reportarray = {0, 0, 0x04, 0, 0, 0, 0, 0};
+  usb_sendKeys(reportarray);
 
-  if (KeyScanner::special_key > 0) {
-    process_user_special_keys();
-    KeyScanner::special_key = 0;
-  }
-
-  if (KeyScanner::macro > 0) {
-    process_user_macros(KeyScanner::macro);
-    KeyScanner::macro = 0;
-  }
-  UpdateQueue();
-  if (!stringbuffer.empty()) // if the macro buffer isn't empty, send the first character of the buffer... which is located at the back of the queue
-  {
-    std::array<uint8_t, 8> reportarray = {0, 0, 0, 0, 0, 0, 0, 0};
-    uint16_t keyreport = stringbuffer.back();
-    stringbuffer.pop_back();
-
-    reportarray[0] = static_cast<uint8_t>((keyreport & 0xFF00) >> 8); // mods
-    reportarray[1] = static_cast<uint8_t>(keyreport & 0x00FF);
-
-    auto buffer_iterator = reportbuffer.begin();
-    buffer_iterator = reportbuffer.insert(buffer_iterator, reportarray);
-
-    uint16_t lookahead_keyreport = stringbuffer.back();
-    if (lookahead_keyreport == keyreport) // if the next key is the same, make sure to send a key release before sending it again... but keep the mods.
-    {
-      reportarray[0] = static_cast<uint8_t>((keyreport & 0xFF00) >> 8); // mods;
-      reportarray[1] = 0;
-      buffer_iterator = reportbuffer.begin();
-      buffer_iterator = reportbuffer.insert(buffer_iterator, reportarray);
-    }
-  }
-
-  if (!reportbuffer.empty()) // if the report buffer isn't empty, send the first character of the buffer... which is located at the end of the queue
-  {
-    std::array<uint8_t, 8> reportarray = reportbuffer.back();
-    reportbuffer.pop_back();
-    switch (keyboardstate.connectionState) {
-    case CONNECTION_USB:
-      usb_sendKeys(reportarray);
-      delay(keyboardconfig.keysendinterval * 2);
-      break;
-    case CONNECTION_BT:
-      bt_sendKeys(reportarray);
-      delay(keyboardconfig.keysendinterval * 2);
-      break;
-    case CONNECTION_NONE: // save the report for when we reconnect
-      auto it = reportbuffer.end();
-      it = reportbuffer.insert(it, reportarray);
-      break;
-    }
-
-    if (reportbuffer.empty()) // make sure to send an empty report when done...
-    {
-      switch (keyboardstate.connectionState) {
-      case CONNECTION_USB:
-        usb_sendKeys({0, 0, 0, 0, 0, 0, 0, 0});
-        delay(keyboardconfig.keysendinterval * 2);
-        break;
-      case CONNECTION_BT:
-        bt_sendKeys({0, 0, 0, 0, 0, 0, 0, 0});
-        delay(keyboardconfig.keysendinterval * 2);
-        break;
-      case CONNECTION_NONE: // save the report for when we reconnect
-        auto it = reportbuffer.end();
-        it = reportbuffer.insert(it, {0, 0, 0, 0, 0, 0, 0, 0});
-        break;
-      }
-    }
-    // KeyScanner::processingmacros=0;
-  } else if ((KeyScanner::reportChanged)) // any new key presses anywhere?
-  {
-    switch (keyboardstate.connectionState) {
-    case CONNECTION_USB:
-      usb_sendKeys(KeyScanner::currentReport);
-      break;
-    case CONNECTION_BT:
-      bt_sendKeys(KeyScanner::currentReport);
-      break;
-    case CONNECTION_NONE: // save the report for when we reconnect
-      auto it = reportbuffer.begin();
-      it = reportbuffer.insert(it, {KeyScanner::currentReport[0], KeyScanner::currentReport[1], KeyScanner::currentReport[2], KeyScanner::currentReport[3],
-                                    KeyScanner::currentReport[4], KeyScanner::currentReport[5], KeyScanner::currentReport[6], KeyScanner::currentReport[7]});
-      break;
-    }
-    LOG_LV1("MXSCAN", "SEND: %i %i %i %i %i %i %i %i %i ", keyboardstate.timestamp, KeyScanner::currentReport[0], KeyScanner::currentReport[1],
-            KeyScanner::currentReport[2], KeyScanner::currentReport[3], KeyScanner::currentReport[4], KeyScanner::currentReport[5],
-            KeyScanner::currentReport[6], KeyScanner::currentReport[7]);
-  } else if (KeyScanner::specialfunction > 0) {
-    process_keyboard_function(KeyScanner::specialfunction);
-    KeyScanner::specialfunction = 0;
-  } else if (KeyScanner::consumer > 0) {
-    switch (keyboardstate.connectionState) {
-    case CONNECTION_USB:
-      usb_sendMediaKey(KeyScanner::consumer);
-      break;
-    case CONNECTION_BT:
-      bt_sendMediaKey(KeyScanner::consumer);
-      break;
-    case CONNECTION_NONE:
-      speaker.playTone(TONE_BLE_DISCONNECT);
-      break; // we have lost a report!
-    }
-    KeyScanner::consumer = 0;
-  } else if (KeyScanner::mouse > 0) {
-    switch (keyboardstate.connectionState) {
-    case CONNECTION_USB:
-      usb_sendMouseKey(KeyScanner::mouse);
-      break;
-    case CONNECTION_BT:
-      bt_sendMouseKey(KeyScanner::mouse);
-      break;
-    case CONNECTION_NONE:
-      speaker.playTone(TONE_BLE_DISCONNECT);
-      break; // we have lost a report!
-    }
-    KeyScanner::mouse = 0;
-  }
-
-#if BLE_PERIPHERAL == 1 | BLE_CENTRAL == 1                                                         /**************************************************/
-  if (KeyScanner::layerChanged || (keyboardstate.timestamp - keyboardstate.lastupdatetime > 1000)) // layer comms
-  {
-    keyboardstate.lastupdatetime = keyboardstate.timestamp;
-    sendlayer(KeyScanner::localLayer);
-    LOG_LV1("MXSCAN", "Layer %i  %i", keyboardstate.timestamp, KeyScanner::localLayer);
-    KeyScanner::layerChanged = false; // mark layer as "not changed" since last update
-  }
-#endif /**************************************************/
+//   KeyScanner::getReport(); // get state data - Data is in KeyScanner::currentReport
+//
+//   if (KeyScanner::special_key > 0) {
+//     process_user_special_keys();
+//     KeyScanner::special_key = 0;
+//   }
+//
+//   if (KeyScanner::macro > 0) {
+//     process_user_macros(KeyScanner::macro);
+//     KeyScanner::macro = 0;
+//   }
+//   UpdateQueue();
+//   if (!stringbuffer.empty()) // if the macro buffer isn't empty, send the first character of the buffer... which is located at the back of the queue
+//   {
+//     std::array<uint8_t, 8> reportarray = {0, 0, 0, 0, 0, 0, 0, 0};
+//     uint16_t keyreport = stringbuffer.back();
+//     stringbuffer.pop_back();
+//
+//     reportarray[0] = static_cast<uint8_t>((keyreport & 0xFF00) >> 8); // mods
+//     reportarray[1] = static_cast<uint8_t>(keyreport & 0x00FF);
+//
+//     auto buffer_iterator = reportbuffer.begin();
+//     buffer_iterator = reportbuffer.insert(buffer_iterator, reportarray);
+//
+//     uint16_t lookahead_keyreport = stringbuffer.back();
+//     if (lookahead_keyreport == keyreport) // if the next key is the same, make sure to send a key release before sending it again... but keep the mods.
+//     {
+//       reportarray[0] = static_cast<uint8_t>((keyreport & 0xFF00) >> 8); // mods;
+//       reportarray[1] = 0;
+//       buffer_iterator = reportbuffer.begin();
+//       buffer_iterator = reportbuffer.insert(buffer_iterator, reportarray);
+//     }
+//   }
+//
+//   if (!reportbuffer.empty()) // if the report buffer isn't empty, send the first character of the buffer... which is located at the end of the queue
+//   {
+//     std::array<uint8_t, 8> reportarray = reportbuffer.back();
+//     reportbuffer.pop_back();
+//     switch (keyboardstate.connectionState) {
+//     case CONNECTION_USB:
+//       usb_sendKeys(reportarray);
+//       delay(keyboardconfig.keysendinterval * 2);
+//       break;
+//     case CONNECTION_BT:
+//       bt_sendKeys(reportarray);
+//       delay(keyboardconfig.keysendinterval * 2);
+//       break;
+//     case CONNECTION_NONE: // save the report for when we reconnect
+//       auto it = reportbuffer.end();
+//       it = reportbuffer.insert(it, reportarray);
+//       break;
+//     }
+//
+//     if (reportbuffer.empty()) // make sure to send an empty report when done...
+//     {
+//       switch (keyboardstate.connectionState) {
+//       case CONNECTION_USB:
+//         usb_sendKeys({0, 0, 0, 0, 0, 0, 0, 0});
+//         delay(keyboardconfig.keysendinterval * 2);
+//         break;
+//       case CONNECTION_BT:
+//         bt_sendKeys({0, 0, 0, 0, 0, 0, 0, 0});
+//         delay(keyboardconfig.keysendinterval * 2);
+//         break;
+//       case CONNECTION_NONE: // save the report for when we reconnect
+//         auto it = reportbuffer.end();
+//         it = reportbuffer.insert(it, {0, 0, 0, 0, 0, 0, 0, 0});
+//         break;
+//       }
+//     }
+//     // KeyScanner::processingmacros=0;
+//   } else if ((KeyScanner::reportChanged)) { // any new key presses anywhere?
+//     switch (keyboardstate.connectionState) {
+//     case CONNECTION_USB:
+//       usb_sendKeys(KeyScanner::currentReport);
+//       break;
+//     case CONNECTION_BT:
+//       bt_sendKeys(KeyScanner::currentReport);
+//       break;
+//     case CONNECTION_NONE: // save the report for when we reconnect
+//       auto it = reportbuffer.begin();
+//       it = reportbuffer.insert(it, {KeyScanner::currentReport[0], KeyScanner::currentReport[1], KeyScanner::currentReport[2], KeyScanner::currentReport[3],
+//                                     KeyScanner::currentReport[4], KeyScanner::currentReport[5], KeyScanner::currentReport[6], KeyScanner::currentReport[7]});
+//       break;
+//     }
+//     LOG_LV1("MXSCAN", "SEND: %i %i %i %i %i %i %i %i %i ", keyboardstate.timestamp, KeyScanner::currentReport[0], KeyScanner::currentReport[1],
+//             KeyScanner::currentReport[2], KeyScanner::currentReport[3], KeyScanner::currentReport[4], KeyScanner::currentReport[5],
+//             KeyScanner::currentReport[6], KeyScanner::currentReport[7]);
+//   } else if (KeyScanner::specialfunction > 0) {
+//     process_keyboard_function(KeyScanner::specialfunction);
+//     KeyScanner::specialfunction = 0;
+//   } else if (KeyScanner::consumer > 0) {
+//     switch (keyboardstate.connectionState) {
+//     case CONNECTION_USB:
+//       usb_sendMediaKey(KeyScanner::consumer);
+//       break;
+//     case CONNECTION_BT:
+//       bt_sendMediaKey(KeyScanner::consumer);
+//       break;
+//     case CONNECTION_NONE:
+//       speaker.playTone(TONE_BLE_DISCONNECT);
+//       break; // we have lost a report!
+//     }
+//     KeyScanner::consumer = 0;
+//   } else if (KeyScanner::mouse > 0) {
+//     switch (keyboardstate.connectionState) {
+//     case CONNECTION_USB:
+//       usb_sendMouseKey(KeyScanner::mouse);
+//       break;
+//     case CONNECTION_BT:
+//       bt_sendMouseKey(KeyScanner::mouse);
+//       break;
+//     case CONNECTION_NONE:
+//       speaker.playTone(TONE_BLE_DISCONNECT);
+//       break; // we have lost a report!
+//     }
+//     KeyScanner::mouse = 0;
+//   }
+//
+// #if BLE_PERIPHERAL == 1 | BLE_CENTRAL == 1                                                         /**************************************************/
+//   if (KeyScanner::layerChanged || (keyboardstate.timestamp - keyboardstate.lastupdatetime > 1000)) // layer comms
+//   {
+//     keyboardstate.lastupdatetime = keyboardstate.timestamp;
+//     sendlayer(KeyScanner::localLayer);
+//     LOG_LV1("MXSCAN", "Layer %i  %i", keyboardstate.timestamp, KeyScanner::localLayer);
+//     KeyScanner::layerChanged = false; // mark layer as "not changed" since last update
+//   }
+// #endif /**************************************************/
 }
 
 // keyscantimer is being called instead
@@ -1142,7 +1144,7 @@ void keyscantimer_callback(TimerHandle_t _handle) {
   // go longer than the interval time.
 
 #if MATRIX_SCAN == 1
-  scanMatrix();
+  // scanMatrix();
 #endif
 #if SEND_KEYS == 1
   sendKeyPresses();
