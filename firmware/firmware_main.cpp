@@ -1190,8 +1190,8 @@ void keyscantimer_callback(TimerHandle_t _handle) {
 #if SEND_KEYS == 1
   sendKeyPresses();
 #endif
-  keyboardstate.lastuseractiontime = max(KeyScanner::getLastPressed(), keyboardstate.lastuseractiontime); // use the latest time to check for sleep...
-  unsigned long timesincelastkeypress = keyboardstate.timestamp - keyboardstate.lastuseractiontime;
+  //keyboardstate.lastuseractiontime = max(KeyScanner::getLastPressed(), keyboardstate.lastuseractiontime); // use the latest time to check for sleep...
+  //unsigned long timesincelastkeypress = keyboardstate.timestamp - keyboardstate.lastuseractiontime;
 
 #if SLEEP_ACTIVE == 1
   switch (keyboardstate.connectionState) {
@@ -1200,19 +1200,19 @@ void keyscantimer_callback(TimerHandle_t _handle) {
     break;
 
   case CONNECTION_BT:
-    gotoSleep(timesincelastkeypress, true);
+    //gotoSleep(timesincelastkeypress, true);
     break;
 
   case CONNECTION_NONE:
-    gotoSleep(timesincelastkeypress, false);
+    //gotoSleep(timesincelastkeypress, false);
     break;
   }
 #endif
 
 #if BLE_CENTRAL == 1 // this is for the master half...
-  if ((timesincelastkeypress < 10) && (!Bluefruit.Central.connected() && (!Bluefruit.Scanner.isRunning()))) {
-    Bluefruit.Scanner.start(0); // 0 = Don't stop scanning after 0 seconds  ();
-  }
+  // if ((timesincelastkeypress < 10) && (!Bluefruit.Central.connected() && (!Bluefruit.Scanner.isRunning()))) {
+  //   Bluefruit.Scanner.start(0); // 0 = Don't stop scanning after 0 seconds  ();
+  // }
 #endif
 }
 //********************************************************************************************//
