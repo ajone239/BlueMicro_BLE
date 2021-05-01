@@ -24,6 +24,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
 #include "firmware.h"
 #include <Adafruit_LittleFS.h>
 #include <Arduino.h>
+#include <Wire.h>
 #include <InternalFileSystem.h>
 #include <bluefruit.h>
 
@@ -31,6 +32,10 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
 // Keyboard Matrix
 byte rows[] MATRIX_ROW_PINS;    // Contains the GPIO Pin Numbers defined in keyboard_config.h
 byte columns[] MATRIX_COL_PINS; // Contains the GPIO Pin Numbers defined in keyboard_config.h
+
+// ajone239
+static std::array<uint8_t, 8> report;
+static int got_byte = 0;
 
 SoftwareTimer keyscantimer, batterytimer;
 
@@ -162,11 +167,31 @@ void saveConfig() {
   }
 }
 
+// ajone239
+void receiveEvent(int bytes) {
+  if (bytes != 8) {
+    Serial.print(bytes);
+    Serial.print(":");
+    Serial.println("wrong number of bytes");
+    return;
+  }
+  for (int i = 0; i < 8; i++) {
+    report[i] = Wire.read();    // read one character from the I2C
+  }
+  got_byte = 1;
+}
 /**************************************************************************************************************************/
 // put your setup code here, to run once:
 /**************************************************************************************************************************/
 // cppcheck-suppress unusedFunction
 void setup() {
+
+  // ajone239
+  // Start the I2C Bus as Slave on address 9
+  Wire.begin(9);
+  // Attach a function to trigger when something is received.
+  Wire.onReceive(receiveEvent);
+  Serial.println("Ready");
 
   setupGpio(); // checks that NFC functions on GPIOs are disabled.
   setupWDT();
@@ -1004,8 +1029,23 @@ void process_user_special_keys() {
 void sendKeyPresses() {
 
   // ajone239
-  std::array<uint8_t, 8> reportarray = {0, 0, 0x04, 0, 0, 0, 0, 0};
-  usb_sendKeys(reportarray);
+  if (got_byte) {
+    got_byte = 0;
+    // usb_sendKeys(report);
+    switch (keyboardstate.connectionState) {
+      case CONNECTION_USB:
+        usb_sendKeys(report);
+        delay(keyboardconfig.keysendinterval * 2);
+        break;
+      case CONNECTION_BT:
+        bt_sendKeys(report);
+        delay(keyboardconfig.keysendinterval * 2);
+        break;
+      case CONNECTION_NONE: // save the report for when we reconnect
+      default:
+        break;
+    }
+  }
 
 //   KeyScanner::getReport(); // get state data - Data is in KeyScanner::currentReport
 //
